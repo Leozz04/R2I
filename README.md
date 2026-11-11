@@ -6,9 +6,9 @@
 
 **Resources · Rules · Insight**
 
-A research harness for the next generation of GenAI: AI threads submit memorials, you just sign the edicts.
+A research harness for the next generation of AI agents. The agents do the work and file the reports; you read them and sign off.
 
-Built on Claude Code + Obsidian · a sqlite ledger as the single source of truth · one prompt starts a new project
+Built on Claude Code and Obsidian · one SQLite ledger as the source of truth · a new project from a single prompt
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB.svg)
@@ -21,88 +21,91 @@ Built on Claude Code + Obsidian · a sqlite ledger as the single source of truth
 
 ---
 
-![The human gives resources, rules (a 3 KB must-carry list) and insight; a manager agent and its coworkers write the SQLite ledger; reports and edicts go back to the human](docs/img/c-simple.svg)
+![The human provides resources, rules (a 3 KB must-carry list) and insight; a manager agent and its coworkers write to the SQLite ledger; reports and edicts flow back to the human](docs/img/c-simple.svg)
 
-In a research project, AI can already read papers, write code, run experiments and write reports on its own. What still needs a human is **granting resources, laying down rules and bringing insight (setting direction, accepting conclusions)**. R²I turns that division of labour into a working harness. A set of Claude Code background threads work under the rules. Anything you must decide becomes a one-page "memorial" in your Obsidian vault, and a tick or a sentence from you is the edict. Everything else the threads decide, record and hand over themselves.
+AI agents can already read papers, write code, run experiments and write up the results on their own. What a research project still needs a person for is narrower: **providing resources, setting the rules, and supplying insight** — choosing the direction and deciding which conclusions to accept. R²I is a harness built around that split.
 
-The stronger the AI gets, the less you have to manage. R²I is named after the only three things it aims to leave to a human: **Resources, Rules and Insight**.
+A team of Claude Code background agents ("threads") works under rules you set. When something genuinely needs your call, it becomes a one-page request in your Obsidian vault, and a checkbox or a sentence from you settles it. Everything else, the threads decide, log and hand off on their own.
 
-The square has a second reading. In statistics, R² (the coefficient of determination) is the share of the variation that a model explains. Read yourself as the model and the project as the data: your R² is how much of what happened in the project you can explain. The more the agents do, the faster that number falls unless something holds it up. R²I's goal is to keep your R² close to 1, so that insight never drops out.
+The better the models get, the less there is for you to manage. The name comes from the only three things R²I means to leave with a person: **Resources, Rules and Insight**.
+
+The square has a second meaning. In statistics, R² (the coefficient of determination) is the share of the variance a model explains. Treat yourself as the model and the project as the data: your R² is how much of what happened in the project you can actually explain. The more the agents do, the faster that number drops, unless something keeps it up. R²I is built to keep your R² close to 1, so you never lose track of what the work has found.
 
 ## Highlights
 
-- **Edict-style interaction.** Threads do not chase you in chat. Anything you must decide becomes an approval page via `r2i ask` (question, options, recommendation, cost, evidence), pushed to your phone when ntfy is configured. You tick an option or write under "my answer" on the page, and the program hands your exact words back to the thread. Notifications during quiet hours are held until morning.
-- **A research harness built for next-generation GenAI.** Threads are Claude Code background agents, opened, assigned and collected by one dispatcher session. Each thread has a `cc_…` identity, a department-named agent type, a handover page and a closing check. The stronger the models, the shorter the rules and the less a human has to step in.
-- **Human–knowledge sync.** A sqlite ledger is the single source of truth for experiments, decisions, budgets, waits, ideas and hypotheses. Every minute a program renders it into Obsidian pages: home, approvals, syncs, progress, knowledge base and terminology. Humans read the vault, AI writes the ledger, and rendering never calls a model.
-- **One persistent source for rules and CLAUDE.md.** The whole project has one rules page (vault `项目规则.md`) and one must-read checklist. `CLAUDE.md`, `AGENTS.md` and `GEMINI.md` are all generated from it and never edited by hand. Change sessions, models or people, and the rules neither get lost nor fork.
-- **Nightly housekeeping.** You tick the night queue on your phone and it runs within the night budget. A night watchdog checks disks, the external disk and balances, and an hourly self-check catches budget mismatches, stuck queues and unanswered replies. Every night at 04:30 `r2i nightly run` drafts a repo tidy plan, "dreams" over yesterday's threads to propose memory changes, refreshes the terminology and writes the morning note.
-- **New ideas, organised.** New ideas and hypotheses go into the ideas / hypotheses tables in the same turn, with audit status. Before any major pivot, a thread must first write "what we have tried".
-- **Self-maintained handovers and memory.** A handover is one "current state" page. Threads are reminded to rewrite it before hitting the context limit, and a program check gates closing. Team memory holds only pointers and slow-changing conventions.
-- **Gates on money, anything outward and deletion.** Every paid call goes through `r2i paid-run` (budget, cap, ledger), and keys live only in the system Keychain. Push, publish and delete accept only words you typed yourself in that thread.
+- **Decisions come to you as pages, not pings.** Threads don't chase you in chat. Anything you need to decide becomes an approval page via `r2i ask`, with the question, the options, a recommendation, the cost and the evidence. With ntfy set up, it is pushed to your phone. Tick an option or type under "my answer", and your exact words go back to the thread. Notifications during quiet hours wait until morning.
+- **Designed for stronger models.** Threads are Claude Code background agents that one dispatcher session starts, assigns and closes. Each has a `cc_…` ID, an agent type named after its team, a handover page and a closing check. As models improve, the rules get shorter and you step in less.
+- **You stay in sync with the work.** A SQLite ledger is the single source of truth for experiments, decisions, budgets, pending questions, ideas and hypotheses. A script renders it into Obsidian pages every minute: home, approvals, updates, progress, knowledge base and glossary. You read the vault, the agents write the ledger, and rendering never calls a model.
+- **One source for the rules.** The project has one rules page (`项目规则.md` in the vault) and one must-read checklist. `CLAUDE.md`, `AGENTS.md` and `GEMINI.md` are all generated from it and never edited by hand, so the rules don't drift or fork when sessions, models or people change.
+- **Housekeeping runs overnight.** Approve the night queue from your phone and it runs within the night budget. A night watchdog checks disk space, the external drive and account balances; an hourly self-check catches budget mismatches, stuck queues and unanswered replies. At 04:30 every night, `r2i nightly run` drafts a repo clean-up plan, "dreams" over the previous day's threads to propose memory edits, updates the glossary and writes a morning summary.
+- **Ideas don't get lost.** New ideas and hypotheses are logged to the ideas and hypotheses tables as they come up, along with their review status. Before any major change of direction, a thread has to write up what has already been tried.
+- **Handoffs and memory that maintain themselves.** A handoff is a single "current state" page. Threads are prompted to rewrite it before they hit the context limit, and a check must pass before a thread can close. Shared memory holds only pointers and conventions that rarely change.
+- **Hard gates on spending, anything external and deletion.** Every paid call goes through `r2i paid-run` (budget, per-run cap, ledger entry), and API keys live only in the macOS Keychain. Pushing, publishing and deleting go ahead only on words you typed yourself in that thread.
 
-## Start with one prompt
+## Quick start
 
-Make an empty directory, open a new Claude Code session in it, and paste:
+Create an empty directory, open a new Claude Code session in it, and paste:
 
 ```
 Set up an R²I research project in this empty directory. First clone
 https://github.com/Leozz04/R2I.git into tools/r2i, then read
-tools/r2i/BOOTSTRAP.md and follow it from step 1 to step 8. Rules: do not make me run
-terminal commands (except writing keys into the Keychain); ask all questions at once and only the
-necessary ones; configure resources in one pass from docs/RESOURCES-SETUP.md; set up the rules
-with me from scratch following docs/RULES-SETUP.md; ask me before creating remote repositories,
-pushing, or sending anything outside.
+tools/r2i/BOOTSTRAP.md and follow steps 1 through 8. Ground rules: don't make me
+run terminal commands (except adding keys to the Keychain); ask all your questions
+at once, and only the ones you need; configure resources in a single pass using
+docs/RESOURCES-SETUP.md; set up the rules with me from scratch using
+docs/RULES-SETUP.md; ask me before creating remote repositories, pushing, or
+sending anything outside this machine.
 ```
 
-An existing `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` in the project is never dropped: `r2i entries` keeps it below the generated block and backs it up once as `*.pre-r2i`.
+If the project already has a `CLAUDE.md`, `AGENTS.md` or `GEMINI.md`, nothing is lost: `r2i entries` keeps your content below the generated block and saves a one-time backup as `*.pre-r2i`.
 
-The agent checks dependencies, installs, and asks you only 4 things: project name, owner, time zone and first mainline. Then it runs `r2i init`, `r2i install` and `r2i doctor`, sends you a resource checklist to fill in once, sets up the rules with you from scratch, and opens the first thread. Apart from writing keys into the Keychain, you never touch a terminal.
+The agent checks dependencies, installs everything and asks you four things: the project name, the owner, the time zone and the first research line. It then runs `r2i init`, `r2i install` and `r2i doctor`, sends you a resource checklist to fill in once, works out the rules with you from scratch and starts the first thread. Apart from adding keys to the Keychain, you never need a terminal.
 
 ## How it works
 
-![Full architecture: the human gives resources, rules and insight; a manager agent and its coworkers work through the approval and paid-run gates; the SQLite ledger is the single record; reports and edicts go back to the human; the rules reach every session as a 3 KB must-carry list](docs/img/c-full.svg)
+![Full architecture: the human provides resources, rules and insight; a manager agent and its coworkers work through the approval and paid-run gates; the SQLite ledger is the single record; reports and edicts flow back to the human; the rules reach every session as a 3 KB must-carry list](docs/img/c-full.svg)
 
-In the diagram, the coworkers are the Claude Code background threads, and Report · Edict is the vault pages where you read results and tick your decision.
+In the diagram, the coworkers are the Claude Code background threads, and "Report · Edict" is the set of vault pages where you read results and record your decisions.
 
-| You manage | How |
+| You own | How |
 |---|---|
-| Resources | Configure once at install from the [resource checklist](docs/RESOURCES-SETUP.md); afterwards approve only spends above your line and the night budget |
-| Rules | Following the [rules setup guide](docs/RULES-SETUP.md), write from scratch the list of "what I decide"; threads decide the rest and leave a one-line "done as X" |
-| Insight | Read sync pages, progress pages and the knowledge base in the vault; important conclusions get a sync page opened by the program |
+| Resources | Set up once during install with the [resource checklist](docs/RESOURCES-SETUP.md). After that, you approve only spending above your threshold and the nightly budget. |
+| Rules | Use the [rules setup guide](docs/RULES-SETUP.md) to write, from scratch, the list of things you decide. Threads decide everything else and leave a one-line "done as X". |
+| Insight | Read the update pages, progress pages and knowledge base in the vault. Important findings get their own update page automatically. |
 
-## What exists and what does not yet
+## Status
 
-Stated as it is: an automation is not described as running before it ships.
+Listed as it stands: nothing is described as running until it actually ships.
 
 | Feature | Status |
 |---|---|
 | Ledger, approval pages, reply collection, thread layer, hooks, `r2i init` / `install` / `doctor` | Shipped (tested privately) |
-| Spending gate `r2i paid-run`, code worker `r2i worker`, relay key isolation | Shipped |
+| Spending gate `r2i paid-run`, code worker `r2i worker`, separate keys for relay endpoints | Shipped |
 | Night queue, night watchdog, hourly self-check | Shipped (launchd jobs) |
-| Ideas / hypotheses tables, handover check | Shipped |
-| Nightly run `r2i nightly run` (04:30 launchd job): repo tidy plan, memory "dreaming", terminology update, morning note, stale sync pages closed | Shipped; needs `[worker]` configured. Run end to end once on a toy project with a real model (claude-sonnet-5-5 via a relay, dry run, 4 worker calls, about 2.1 CNY, 3 min): repo plan, dream proposal, terminology page and morning note written; link and identifier self-check passed |
-| Self-maintained memory | Partial: "dreaming" reads yesterday's threads and writes a proposal page each night; the memory itself is changed only after review (pointers only, local edits, stale facts rewritten) |
+| Ideas and hypotheses tables, handoff check | Shipped |
+| Nightly run `r2i nightly run` (launchd job at 04:30): repo clean-up plan, memory "dreaming", glossary update, morning summary, closing stale update pages | Shipped; requires `[worker]` to be configured. Tested end to end once on a toy project with a real model (claude-sonnet-5-5 through a relay, dry run, 4 worker calls, about 2.1 CNY, 3 minutes): it produced the repo plan, the dream proposal, the glossary page and the morning summary, and passed the link and ID self-check. |
+| Self-maintaining memory | Partial: each night, "dreaming" reads the previous day's threads and writes a page of proposed edits. Memory itself changes only after review (pointers only, targeted edits, stale facts rewritten). |
 
-The vault pages, rule files and CLI messages are in Chinese; the English documents describe the same setup.
+The vault pages, rule files and CLI messages are in Chinese; the English docs describe the same setup.
 
 ## What comes next
 
-Planned, not built. R²I today is tuned for the current generation of models; as base models get stronger, these are the next steps.
+Planned, not yet built. R²I is tuned for today's models; as base models get stronger, these come next.
 
 1. **Dreaming that brainstorms, not just tidies.** The nightly "dream" pass should also:
-   - collect garbage: archive and fold failed experiment branches in the `experiments` table that taught nothing;
-   - cross-pollinate: compare results across mainlines, write new hypotheses into the `hypotheses` table, and put a ready-to-sign option in the morning edict, e.g. "Based on last night's 50 runs, drop plan 2 and test hypothesis X instead."
-2. **Incubation mode.** For a new project or a big pivot, you and the manager agent talk in dense, many-turn exchanges (similar to [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep)). Once you agree, one command converges the conversation into `goals`, `criteria` and `structures` rows in the ledger, and the project switches to the quiet edict mode.
-3. **More base models, beyond the Claude Code CLI.** Rules already compile to `CLAUDE.md`, `AGENTS.md` and `GEMINI.md`. Next: threads and workers on other base models and agent runtimes, all on the same ledger.
-4. **Fewer edicts as models improve.** The list of "what I decide" should shrink with model capability: fewer approval pages, shorter reports. The ledger keeps everything for audit.
+   - collect garbage: archive and collapse failed branches in the `experiments` table that taught nothing;
+   - cross-pollinate: compare results across research lines, add new hypotheses to the `hypotheses` table, and put a ready-to-approve option in the morning summary, e.g. "Based on last night's 50 runs, drop plan 2 and test hypothesis X instead."
+2. **Incubation mode.** For a new project or a major pivot, you and the manager agent work through it in a long, dense conversation (similar to [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep)). Once you agree, a single command turns the conversation into `goals`, `criteria` and `structures` rows in the ledger, and the project switches to quiet, approval-driven execution.
+3. **More base models, beyond the Claude Code CLI.** The rules already compile to `CLAUDE.md`, `AGENTS.md` and `GEMINI.md`. Next: threads and workers running on other base models and agent runtimes, all sharing one ledger.
+4. **Fewer approvals as models improve.** The list of things you decide should shrink as models get better: fewer approval pages, shorter reports. The ledger still keeps everything for audit.
 
 ## Docs
 
-- [BOOTSTRAP.md](BOOTSTRAP.md): the 8 steps the bootstrap session follows
+- [BOOTSTRAP.md](BOOTSTRAP.md): the 8 steps the setup session follows
 - [docs/RULES-SETUP.md](docs/RULES-SETUP.md): rules setup guide
-- [docs/RESOURCES-SETUP.md](docs/RESOURCES-SETUP.md): resource install checklist
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): the manager, the ledger and the five mechanisms, one diagram each
-- [docs/REFERENCE.md](docs/REFERENCE.md): full command and config reference
+- [docs/RESOURCES-SETUP.md](docs/RESOURCES-SETUP.md): resource setup checklist
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): the manager, the ledger and the five core mechanisms, one diagram each
+- [docs/REFERENCE.md](docs/REFERENCE.md): full command and configuration reference
 
 ## Requirements
 
