@@ -1,0 +1,295 @@
+/* ============================================================
+   academic.css — Minimal 9.1.4 · 学术笔记阅读层
+   不改主题源码，只覆盖 CSS 变量与少量作用域规则。
+   三种版面通过 frontmatter cssclasses 选择：
+     reading   长文阅读（40rem，松排版）
+     research  密集研究笔记（52rem，紧排版，表格/公式为主）
+     wide      宽表/对照（72rem）
+   ============================================================ */
+
+/* ---------- 1. 设计令牌 ---------- */
+body {
+  /* 中西混排：拉丁优先，中文回落到系统 CJK 字体 */
+  --font-text:
+    "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+    "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC",
+    "Microsoft YaHei", sans-serif;
+  --font-interface: var(--font-text);
+  --font-monospace:
+    "JetBrains Mono", "SF Mono", ui-monospace, "Menlo",
+    "PingFang SC", monospace;
+
+  /* 字号阶：标题压缩，正文不动 */
+  --h1-size: 1.70em;
+  --h2-size: 1.32em;
+  --h3-size: 1.12em;
+  --h4-size: 1.00em;
+  --h5-size: 0.94em;
+  --h6-size: 0.90em;
+
+  --h1-weight: 680;
+  --h2-weight: 640;
+  --h3-weight: 600;
+  --h4-weight: 600;
+  --h5-weight: 600;
+  --h6-weight: 600;
+
+  /* 节奏 */
+  --line-height-normal: 1.68;
+  --p-spacing: 1.00em;
+
+  /* 语义色：只用于区分含义，不做装饰 */
+  --ac-rule: var(--background-modifier-border);
+  --ac-rule-soft: var(--background-modifier-border-hover);
+  --ac-tint: var(--background-secondary);
+  --ac-accent: var(--text-accent);
+  --ac-radius: 5px;
+}
+
+/* ---------- 2. 正文与段落 ---------- */
+.markdown-rendered,
+.markdown-source-view.mod-cm6 .cm-content {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  letter-spacing: 0.002em;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.markdown-rendered p,
+.markdown-source-view.mod-cm6 .cm-line {
+  line-height: var(--line-height-normal);
+}
+
+/* 中英混排时数字与拉丁词两侧留一点气口 */
+.markdown-rendered p,
+.markdown-rendered li {
+  text-spacing-trim: space-first;
+}
+
+/* ---------- 3. 标题层级 ---------- */
+.markdown-rendered h1,
+.markdown-rendered h2,
+.markdown-rendered h3,
+.markdown-rendered h4,
+.markdown-rendered h5,
+.markdown-rendered h6 {
+  letter-spacing: -0.006em;
+  line-height: 1.28;
+}
+
+.markdown-rendered h1 { margin-top: 0.2em; margin-bottom: 0.7em; }
+.markdown-rendered h2 { margin-top: 1.9em; margin-bottom: 0.55em; }
+.markdown-rendered h3 { margin-top: 1.45em; margin-bottom: 0.45em; }
+.markdown-rendered h4 { margin-top: 1.25em; margin-bottom: 0.35em; }
+.markdown-rendered h5,
+.markdown-rendered h6 {
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+  margin-top: 1.1em;
+  margin-bottom: 0.3em;
+}
+
+/* 一级标题下一条细分隔，作为文档的顶部锚 */
+.markdown-rendered h1 {
+  padding-bottom: 0.42em;
+  border-bottom: 1px solid var(--ac-rule);
+}
+
+/* Live Preview 同步字号字重 */
+.markdown-source-view.mod-cm6 .cm-header { letter-spacing: -0.006em; }
+.markdown-source-view.mod-cm6 .HyperMD-header-1 { font-size: var(--h1-size); font-weight: var(--h1-weight); }
+.markdown-source-view.mod-cm6 .HyperMD-header-2 { font-size: var(--h2-size); font-weight: var(--h2-weight); }
+.markdown-source-view.mod-cm6 .HyperMD-header-3 { font-size: var(--h3-size); font-weight: var(--h3-weight); }
+
+/* ---------- 4. 列表、引用、分割线 ---------- */
+.markdown-rendered ul,
+.markdown-rendered ol { padding-inline-start: 1.35em; }
+.markdown-rendered li { margin-block: 0.18em; }
+.markdown-rendered li > p { margin-block: 0.15em; }
+
+.markdown-rendered blockquote {
+  border-left: 2px solid var(--ac-rule);
+  color: var(--text-muted);
+  font-style: normal;       /* 中文不用斜体 */
+  padding-inline-start: 1em;
+  margin-inline: 0;
+}
+
+.markdown-rendered hr {
+  border: none;
+  border-top: 1px solid var(--ac-rule);
+  margin-block: 2.2em;
+}
+
+/* ---------- 5. 链接 ---------- */
+.markdown-rendered a,
+.markdown-rendered .internal-link {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: none;          /* 动效 0 */
+}
+
+.markdown-rendered a:hover,
+.markdown-rendered .internal-link:hover {
+  text-decoration-thickness: 1.5px;
+}
+
+.markdown-rendered .external-link {
+  background-position: 100% 60%;
+}
+
+/* ---------- 6. 高亮 ---------- */
+.markdown-rendered mark,
+.markdown-rendered .cm-highlight {
+  background: color-mix(in srgb, var(--color-yellow) 22%, transparent);
+  color: inherit;
+  padding: 0.06em 0.18em;
+  border-radius: 2px;
+}
+
+/* ---------- 7. Callout ---------- */
+body {
+  --callout-border-width: 2px;
+  --callout-border-opacity: 0.55;
+  --callout-radius: var(--ac-radius);
+  --callout-padding: 0.85em 1em;
+  --callout-title-padding: 0 0 0.35em;
+}
+
+.markdown-rendered .callout {
+  mix-blend-mode: normal;
+}
+
+.markdown-rendered .callout-title {
+  font-weight: 620;
+  font-size: 0.96em;
+  letter-spacing: 0.01em;
+  gap: 0.45em;
+}
+
+.markdown-rendered .callout-content > :first-child { margin-top: 0; }
+.markdown-rendered .callout-content > :last-child { margin-bottom: 0; }
+.markdown-rendered .callout-content p { line-height: 1.6; }
+
+/* 让正文里的 callout 不打断行宽节奏 */
+.markdown-rendered .callout { margin-block: 1.1em; }
+
+/* ---------- 8. 表格 ---------- */
+.markdown-rendered table {
+  border-collapse: collapse;
+  font-size: 0.92em;
+  font-variant-numeric: tabular-nums;
+  margin-block: 1.2em;
+  width: auto;
+  max-width: 100%;
+}
+
+.markdown-rendered th,
+.markdown-rendered td {
+  border: none;
+  border-bottom: 1px solid var(--ac-rule);
+  padding: 0.5em 0.75em;
+  vertical-align: top;
+}
+
+.markdown-rendered th {
+  background: var(--ac-tint);
+  border-bottom: 1px solid var(--ac-rule-soft);
+  font-weight: 620;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown-rendered tbody tr:hover { background: var(--background-modifier-hover); }
+
+/* 数字列右对齐交给 Markdown 的 ---: --- */
+.markdown-rendered td[style*="text-align: right"],
+.markdown-rendered th[style*="text-align: right"] {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Live Preview 里的表格 */
+.markdown-source-view.mod-cm6 .cm-table-widget table { font-size: 0.92em; }
+
+/* ---------- 9. 代码 ---------- */
+.markdown-rendered code {
+  font-size: 0.88em;
+  padding: 0.1em 0.32em;
+  border-radius: 3px;
+  background: var(--ac-tint);
+}
+
+.markdown-rendered pre {
+  border-radius: var(--ac-radius);
+  border: 1px solid var(--ac-rule);
+  padding: 0.85em 1em;
+  line-height: 1.55;
+}
+
+.markdown-rendered pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.86em;
+}
+
+/* ---------- 10. 公式与媒体 ---------- */
+.markdown-rendered .math,
+.markdown-rendered mjx-container {
+  font-size: 1.02em;
+}
+
+.markdown-rendered mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.35em;
+}
+
+.markdown-rendered img {
+  border-radius: var(--ac-radius);
+}
+
+.markdown-rendered .internal-embed img { margin-block: 0.4em; }
+
+/* PDF 嵌入给一点边界，避免白页糊在背景上 */
+.markdown-rendered .pdf-embed,
+.markdown-rendered .internal-embed[src$=".pdf"] {
+  border: 1px solid var(--ac-rule);
+  border-radius: var(--ac-radius);
+  overflow: hidden;
+}
+
+/* ---------- 11. 三种阅读档位 ----------
+   宽度直接写在 sizer 上，不依赖「可读行宽」开关，
+   所以在 readableLineLength 关闭时也生效。          */
+
+/* reading：长文，40rem，行距放宽 */
+.markdown-preview-view.reading .markdown-preview-sizer,
+.markdown-source-view.mod-cm6.reading .cm-sizer {
+  max-width: 40rem;
+  margin-inline: auto;
+}
+.markdown-preview-view.reading .markdown-rendered { font-size: 1.02em; }
+.markdown-preview-view.reading .markdown-rendered p { line-height: 1.78; }
+
+/* research：密集研究笔记，46rem，字号与间距收紧 */
+.markdown-preview-view.research .markdown-preview-sizer,
+.markdown-source-view.mod-cm6.research .cm-sizer {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+.markdown-preview-view.research .markdown-rendered { font-size: 0.96em; }
+.markdown-preview-view.research .markdown-rendered p { line-height: 1.62; }
+.markdown-preview-view.research .markdown-rendered table { font-size: 0.88em; }
+.markdown-preview-view.research .markdown-rendered th,
+.markdown-preview-view.research .markdown-rendered td { padding: 0.42em 0.62em; }
+.markdown-preview-view.research .markdown-rendered h2 { margin-top: 1.6em; }
+
+/* wide：交给 Minimal 自己的 .wide（= 主题设置里的 lineWidthWide），
+   这里只把表格铺满，不覆盖主题的宽度值。 */
+.markdown-preview-view.wide .markdown-rendered table { width: 100%; }
+.markdown-preview-view.wide .markdown-preview-sizer,
+.markdown-source-view.mod-cm6.wide .cm-sizer {
+  max-width: var(--max-width);
+  width: var(--line-width-wide);
+  margin-inline: auto;
+}

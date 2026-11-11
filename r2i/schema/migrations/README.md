@@ -1,0 +1,1 @@
+Numbered migrations, applied in order by `db.connect` when the ledger's `meta.schema_version` is lower: `0002_<what>.sql`, `0003_<what>.sql`, ... Version 1 is `../schema.sql` itself. Each file is plain SQL; `schema.sql` is updated to the same end state in the same commit.

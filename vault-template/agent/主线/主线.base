@@ -1,0 +1,16 @@
+filters:
+  and:
+    - file.inFolder("进度")
+    - file.ext == "md"
+    - file.name != "总览"
+views:
+  - type: table
+    name: 各主线
+    order:
+      - file.name
+      - goal_version
+      - goal_status
+      - criteria_met
+      - criteria_total
+      - open_decisions
+      - last_milestone

@@ -1,0 +1,58 @@
+project v1.0
+
+# Project rules
+
+> [!summary] In one line
+> This page holds what is specific to this project: the department table, the division of labour, paths, and rules that hold only here. The general rules are in `rules/core.md` and are not repeated here. Copy it to `rules/project.md` and fill it in for the project; number items `P-xx` (project rules) and the group letters, and do not use the core rules' R-xx. Changing this page follows core rule R-50a.
+
+## Department table (cited by R-40)
+
+These are the only departments; ask {{owner}} before adding one. Write thread titles as "department｜verb + target".
+
+| Department | What it owns |
+|---|---|
+| ‹department one› | ‹one-sentence duty› |
+| ‹department two› | ‹one-sentence duty› |
+
+## Mainlines and standing threads
+
+| Mainline id | Drive thread title | Audit thread title |
+|---|---|---|
+| ‹main› | "‹department›｜drive ‹mainline name›" | "‹department›｜audit ‹mainline name›" |
+
+## Division of labour (read only your own section)
+
+### Drive
+
+- **P-1 ‹Example: a holdout or test set that has been used for testing stays a holdout or test set.›** Only using results on it to pick a method, tune parameters or change rules makes it unclean; if that was done, the report says "selected on X". `文字`
+- **P-2 ‹Example: a change to scoring or checking code must come with a fixed self-test of 5–10 hand-labelled samples.›** Scoring code must not hard-code the results directory. `文字`
+
+### Audit
+
+- **A-1 ‹Example: there are only four verdicts: PASS, FAIL, wrong step, uncertain.›** When checking a paid result, look at the call status first; a label made by a model cannot be the basis for FAIL. `文字`
+
+### Dispatcher
+
+- **C-1 ‹Example: only dispatch, do no work.›** Forward only messages that need the other side to act, at most once per hour per thread. `文字`
+
+### Maintenance
+
+- **M-1 ‹Example: tests come before code changes; write the test result on the task-sheet line when done.›** `文字`
+
+## Project paths
+
+| Purpose | Path |
+|---|---|
+| Code repository | `‹path›` |
+| Data and outputs (R-31) | `‹runs_root›/runs/` |
+| Other | `‹›` |
+
+## Rules specific to this project
+
+- **P-3 ‹Example: public material must not include a certain comparison.›** ‹One-sentence reason and scope›. `文字`
+
+## 版本记录
+
+| Version | Date | Which items changed | Approved by |
+|---|---|---|---|
+| project v1.0 | ‹YYYY-MM-DD› | initial | {{owner}} |

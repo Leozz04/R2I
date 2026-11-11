@@ -1,0 +1,82 @@
+filters:
+  and:
+    - file.inFolder("汇报")
+    - file.ext == "md"
+views:
+  - type: table
+    name: 要批·没定的
+    filters:
+      and:
+        - file.folder == "汇报/要批"
+        - 状态 == "待你看"
+    order:
+      - file.name
+      - 主线
+      - 金额
+      - 截止
+      - 日期
+    sort:
+      - property: 截止
+        direction: ASC
+    columnSize:
+      file.name: 403
+  - type: table
+    name: 同步·没看的
+    filters:
+      and:
+        - file.folder == "汇报/同步"
+        - 状态 == "待你看"
+    order:
+      - file.name
+      - 种类
+      - 主线
+      - 日期
+    sort:
+      - property: 日期
+        direction: DESC
+    columnSize:
+      file.name: 403
+  - type: table
+    name: 同步·全部
+    filters:
+      or:
+        - file.folder == "汇报/同步"
+        - file.folder.endsWith("/同步")
+        - 类别 == "同步"
+    order:
+      - file.name
+      - 种类
+      - 主线
+      - 日期
+      - 状态
+    sort:
+      - property: 日期
+        direction: DESC
+    columnSize:
+      file.name: 403
+  - type: table
+    name: 结档
+    filters:
+      and:
+        - 种类 == "结档"
+    order:
+      - file.name
+      - 主线
+      - 日期
+      - 状态
+    sort:
+      - property: 日期
+        direction: DESC
+  - type: table
+    name: 归档
+    filters:
+      and:
+        - file.folder.startsWith("汇报/归档")
+    order:
+      - file.name
+      - 类别
+      - 主线
+      - 日期
+    sort:
+      - property: 日期
+        direction: DESC

@@ -1,0 +1,703 @@
+/* =====================================================================
+   r2i.css · vault 排版与配色
+   规范：agent/管理/排版规范.md（改这里之前先改规范）
+   原则（取自 taste-skill，改写成笔记版）：
+   - 界面 90–95% 中性；颜色只用来表达"状态"，不做装饰
+   - 一个结构色（墨蓝：链接、实验块）+ 一个警示色（警示红：只给"需要你"）
+   - 强调先靠对比（粗细、字号、灰度），颜色和 ==高亮== 只给最关键的数字
+   - 不用紫色（Obsidian 默认强调色是紫色，这里换掉）
+   ===================================================================== */
+
+/* ---------- 1. 色板 tokens ---------- */
+body.theme-light.theme-light {
+  --r2i-ink:        #1d2420;   /* 正文：带一点绿的冷近黑 */
+  --r2i-ink-2:      #38423c;   /* 次级正文 */
+  --r2i-muted:      #5d6a63;   /* 元信息：日期、代号、花费、来源 */
+  --r2i-faint:      #a3ada7;
+  --r2i-line:       #d9dfdb;
+  --r2i-line-2:     rgba(29, 36, 32, .22);
+  --r2i-bg:         #f7f8f6;   /* 冷灰纸色 */
+  --r2i-bg-alt:     #eef0ee;   /* 表头、代码、交替行 */
+
+  --r2i-accent:     #2f5f8a;   /* 墨蓝：链接、实验块、焦点 */
+  --r2i-accent-rgb: 47, 95, 138;
+  --r2i-flag:       #a3291f;   /* 警示红：只用于"需要你" */
+  --r2i-flag-rgb:   163, 41, 31;
+  --r2i-pos-rgb:    47, 107, 71;   /* 正结果 / 发现 */
+  --r2i-neg-rgb:    91, 100, 112;  /* 负结果：石板灰，不是红，负结果不是坏事 */
+  --r2i-warn-rgb:   138, 90, 18;  /* 实战教训、术语提醒、巡检告警 */
+  --r2i-ink-rgb:    29, 36, 32;
+
+  --r2i-mark-bg:    #fdeeb0;   /* ==高亮==：只给关键数字 */
+  --r2i-mark-ink:   #1d2420;
+}
+
+body.theme-dark.theme-dark {
+  --r2i-ink:        #e4e9e6;
+  --r2i-ink-2:      #c9d1cc;
+  --r2i-muted:      #9aa7a0;
+  --r2i-faint:      #5e6964;
+  --r2i-line:       #2e3833;
+  --r2i-line-2:     rgba(228, 233, 230, .22);
+  --r2i-bg:         #141917;
+  --r2i-bg-alt:     #1b211e;
+
+  --r2i-accent:     #8fb4dd;
+  --r2i-accent-rgb: 143, 180, 221;
+  --r2i-flag:       #f08d80;
+  --r2i-flag-rgb:   240, 141, 128;
+  --r2i-pos-rgb:    127, 199, 155;
+  --r2i-neg-rgb:    150, 160, 173;
+  --r2i-warn-rgb:   227, 179, 96;
+  --r2i-ink-rgb:    228, 233, 230;
+
+  --r2i-mark-bg:    rgba(250, 204, 21, .22);
+  --r2i-mark-ink:   #eef3ef;
+}
+
+/* ---------- 2. 接到 Obsidian / Minimal 变量上 ---------- */
+body.theme-light.theme-light,
+body.theme-dark.theme-dark {
+  --background-primary:      var(--r2i-bg);
+  --background-primary-alt:  var(--r2i-bg-alt);
+  --background-secondary:    var(--r2i-bg-alt);
+  --text-normal:             var(--r2i-ink);
+  --text-muted:              var(--r2i-muted);
+  --text-faint:              var(--r2i-faint);
+  --text-accent:             var(--r2i-accent);
+  --text-accent-hover:       var(--r2i-accent);
+  --link-color:              var(--r2i-accent);
+  --link-color-hover:        var(--r2i-accent);
+  --link-external-color:     var(--r2i-accent);
+  --link-unresolved-color:   var(--r2i-faint);
+  --interactive-accent:      var(--r2i-accent);
+  --text-highlight-bg:       var(--r2i-mark-bg);
+  --hr-color:                var(--r2i-line);
+  --table-border-color:      var(--r2i-line);
+  --blockquote-border-color: var(--r2i-line-2);
+  --code-background:         var(--r2i-bg-alt);
+  --code-normal:             var(--r2i-ink-2);
+  /* Minimal 自己的色阶变量 */
+  --bg1: var(--r2i-bg);
+  --bg2: var(--r2i-bg-alt);
+  --bg3: rgba(var(--r2i-ink-rgb), .06);
+  --ui1: var(--r2i-line);
+  --ui2: var(--r2i-line-2);
+  --ui3: var(--r2i-faint);
+  --tx1: var(--r2i-ink);
+  --tx2: var(--r2i-muted);
+  --tx3: var(--r2i-faint);
+  --hl1: rgba(var(--r2i-accent-rgb), .18);
+  --hl2: var(--r2i-mark-bg);
+}
+
+/* ---------- 3. 字体与节奏 ---------- */
+body {
+  /* 字体、字号阶、行距沿用 academic.css；这里只管颜色和粗细 */
+  --font-text-size: 16px;
+  --bold-weight: 650;
+  --h1-color: var(--r2i-ink);
+  --h2-color: var(--r2i-ink);
+  --h3-color: var(--r2i-ink);
+  --h4-color: var(--r2i-ink-2);
+}
+
+/* 标题不上色，靠字号和留白区分；h2 上方一条细线分节 */
+.markdown-rendered h2,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-header-2 {
+  margin-top: 2.2em;
+}
+.markdown-rendered h2 {
+  padding-top: 0.9em;
+  border-top: 1px solid var(--r2i-line);
+}
+.markdown-rendered h1 + h2,
+.markdown-rendered > div:first-of-type h2 { border-top: none; }
+.markdown-rendered h3 { margin-top: 1.6em; }
+
+/* 粗体 = 结论句：只加粗细，不上色 */
+.markdown-rendered strong,
+.cm-strong { color: var(--r2i-ink); font-weight: var(--bold-weight); }
+
+/* 斜体只给引语；正文里不用斜体强调 */
+.markdown-rendered em { color: var(--r2i-ink-2); }
+
+/* ---------- 4. ==高亮==：关键数字 ---------- */
+.markdown-rendered mark,
+.cm-highlight {
+  background-color: var(--r2i-mark-bg);
+  color: var(--r2i-mark-ink);
+  padding: 0.05em 0.25em;
+  border-radius: 3px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- 5. 实验代号：`EXP-01` 用行内代码写，显示为灰色小标签 ---------- */
+.markdown-rendered :not(pre) > code {
+  font-size: 0.82em;
+  padding: 0.12em 0.4em;
+  border-radius: 4px;
+  background: var(--r2i-bg-alt);
+  color: var(--r2i-muted);
+  border: 1px solid var(--r2i-line);
+}
+
+/* ---------- 6. 链接 ---------- */
+.markdown-rendered a.internal-link,
+.markdown-rendered a.external-link {
+  text-decoration: underline;
+  text-decoration-color: rgba(var(--r2i-accent-rgb), .35);
+  text-underline-offset: 3px;
+}
+.markdown-rendered a.internal-link:hover,
+.markdown-rendered a.external-link:hover {
+  text-decoration-color: var(--r2i-accent);
+}
+
+/* ---------- 7. 表格：细线分行，数字等宽，表头灰色小字 ---------- */
+.markdown-rendered table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.92em;
+  line-height: 1.55;
+}
+.markdown-rendered th,
+.markdown-rendered td {
+  border: none;
+  border-bottom: 1px solid var(--r2i-line);
+  padding: 0.45em 0.75em;
+  vertical-align: top;
+}
+.markdown-rendered thead th {
+  background: transparent;
+  color: var(--r2i-muted);
+  font-size: 0.86em;
+  font-weight: 560;
+  border-bottom: 1px solid var(--r2i-line-2);
+  text-align: left;
+}
+.markdown-rendered tbody tr:nth-child(even) td { background: rgba(var(--r2i-ink-rgb), .025); }
+.markdown-rendered tbody tr:hover td { background: rgba(var(--r2i-accent-rgb), .06); }
+
+/* ---------- 8. Callout：七种，各有一个意思 ---------- */
+.callout {
+  --callout-radius: 6px;
+  --callout-padding: 0.75em 1em 0.8em 1.05em;
+  --callout-title-weight: 620;
+  --callout-border-width: 0 0 0 3px;
+  --callout-border-opacity: 1;
+  --callout-blend-mode: normal;
+  background-color: rgba(var(--callout-color), .055);
+}
+.callout-title { font-size: 0.95em; }
+.callout-content > p:first-child { margin-top: 0.3em; }
+
+/* 结论：每页最顶上一条，墨色 */
+.callout[data-callout="summary"] {
+  --callout-color: var(--r2i-ink-rgb);
+  --callout-icon: lucide-align-left;
+  background-color: rgba(var(--r2i-ink-rgb), .04);
+  font-size: 1.04em;
+}
+/* 需要你：警示红，全 vault 唯一的红色 */
+.callout[data-callout="owner"] {
+  --callout-color: var(--r2i-flag-rgb);
+  --callout-icon: lucide-flag;
+  --callout-border-width: 0 0 0 4px;
+  background-color: rgba(var(--r2i-flag-rgb), .07);
+}
+/* 发现 / 正结果 */
+.callout[data-callout="finding"] {
+  --callout-color: var(--r2i-pos-rgb);
+  --callout-icon: lucide-check-circle-2;
+}
+/* 负结果：中性灰，不渲染成"失败" */
+.callout[data-callout="negative"] {
+  --callout-color: var(--r2i-neg-rgb);
+  --callout-icon: lucide-minus-circle;
+}
+/* 实战教训 */
+.callout[data-callout="lesson"] {
+  --callout-color: var(--r2i-warn-rgb);
+  --callout-icon: lucide-hard-hat;
+}
+/* 术语提醒、巡检告警 */
+.callout[data-callout="term"],
+.callout[data-callout="warning"] {
+  --callout-color: var(--r2i-warn-rgb);
+  --callout-icon: lucide-alert-triangle;
+}
+/* 实验块：每日笔记里一个实验一块，墨蓝 */
+.callout[data-callout="exp"] {
+  --callout-color: var(--r2i-accent-rgb);
+  --callout-icon: lucide-flask-conical;
+  background-color: transparent;
+  border: 1px solid var(--r2i-line);
+  border-left: 3px solid rgb(var(--r2i-accent-rgb));
+}
+.callout[data-callout="exp"] .callout-title-inner code { color: rgb(var(--r2i-accent-rgb)); }
+/* 已取代：折叠、变淡 */
+.callout[data-callout="superseded"] {
+  --callout-color: var(--r2i-neg-rgb);
+  --callout-icon: lucide-archive;
+  background-color: transparent;
+  opacity: .78;
+}
+.callout[data-callout="superseded"] .callout-content { color: var(--r2i-muted); }
+
+/* ---------- 9. 待决勾选（Tasks）：未勾的项带警示色框，勾掉的变灰 ---------- */
+.markdown-rendered .task-list-item:not(.is-checked) > .task-list-item-checkbox,
+.markdown-rendered .task-list-item[data-task=" "] input[type=checkbox] {
+  border-color: var(--r2i-flag);
+  border-width: 1.5px;
+}
+.markdown-rendered .task-list-item.is-checked {
+  color: var(--r2i-muted);
+}
+.markdown-rendered .task-list-item[data-task="-"] {
+  color: var(--r2i-faint);
+  text-decoration: line-through;
+}
+
+/* ---------- 10. Mermaid：默认中性，状态色由 classDef 给 ---------- */
+.markdown-rendered .mermaid {
+  font-family: var(--font-text);
+  margin: 1.2em 0 1.6em;
+}
+.markdown-rendered .mermaid .node rect,
+.markdown-rendered .mermaid .node polygon,
+.markdown-rendered .mermaid .node circle {
+  fill: var(--r2i-bg-alt);
+  stroke: var(--r2i-line-2);
+  stroke-width: 1px;
+}
+.markdown-rendered .mermaid .edgePath .path,
+.markdown-rendered .mermaid .flowchart-link {
+  stroke: var(--r2i-faint);
+  stroke-width: 1.2px;
+}
+.markdown-rendered .mermaid .nodeLabel,
+.markdown-rendered .mermaid .label { color: var(--r2i-ink); }
+.markdown-rendered .mermaid .edgeLabel { background: var(--r2i-bg); color: var(--r2i-muted); }
+
+/* ---------- 11. 引用块：只做页面导航（"知识：… · 总览：…"），灰色小字 ---------- */
+.markdown-rendered blockquote {
+  border-left: 2px solid var(--r2i-line-2);
+  color: var(--r2i-muted);
+  font-size: 0.92em;
+  padding: 0.1em 0 0.1em 0.9em;
+}
+
+/* ---------- 12. 版式宽度 ----------
+   reading / research / wide 三档的宽度和松紧在 academic.css 里定义，这里不重复。 */
+
+/* 实验索引：表更密 */
+.r2i-index .markdown-rendered table { font-size: 0.86em; }
+.r2i-index .markdown-rendered td { padding: 0.32em 0.6em; }
+
+/* frontmatter（属性）收成灰色 */
+.metadata-container { --metadata-label-text-color: var(--r2i-faint); --metadata-input-text-color: var(--r2i-muted); font-size: 0.86em; }
+
+/* 关系图：节点按文件夹着色在 graph.json 里设，这里只调线色 */
+.graph-view.color-line { color: var(--r2i-line-2); }
+
+/* ---------- 13. 首页、验收进度条、时间线 chip ---------- */
+/* 验收一行：短名 | 条 | 数字。填色 = 读数，黑线 = 要过的线 */
+.r2i-crit {
+  display: grid;
+  grid-template-columns: minmax(9em, 15em) 1fr auto;
+  align-items: center;
+  gap: 0.8em;
+  padding: 0.28em 0;
+  border-bottom: 1px solid var(--r2i-line);
+  font-size: 0.94em;
+}
+.r2i-lab b { color: var(--r2i-muted); font-weight: 600; margin-right: 0.3em; }
+.r2i-lower { color: var(--r2i-faint); font-size: 0.86em; margin-left: 0.3em; }
+.r2i-bar {
+  --v: 0%;
+  --fill: var(--r2i-warn-rgb);
+  position: relative;
+  display: block;
+  height: 0.62em;
+  border-radius: 3px;
+  background:
+    linear-gradient(rgba(var(--fill), .85), rgba(var(--fill), .85)) 0 0 / var(--v) 100% no-repeat,
+    var(--r2i-bg-alt);
+  box-shadow: inset 0 0 0 1px var(--r2i-line);
+}
+.r2i-bar.is-pass { --fill: var(--r2i-pos-rgb); }
+.r2i-bar.is-fail { --fill: var(--r2i-warn-rgb); }
+.r2i-bar.is-base { opacity: .72; }
+.r2i-bar.is-empty {
+  background: repeating-linear-gradient(45deg, var(--r2i-bg-alt) 0 5px, transparent 5px 10px);
+}
+.r2i-bar[style*="--t"]::after {
+  content: "";
+  position: absolute;
+  left: var(--t);
+  top: -0.22em;
+  bottom: -0.22em;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--r2i-ink);
+}
+.r2i-num { color: var(--r2i-ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.r2i-base { color: var(--r2i-faint); font-size: 0.82em; margin-left: 0.25em; }
+.r2i-note { color: var(--r2i-muted); font-size: 0.84em; padding: 0 0 0.3em 0; }
+
+/* 首页卡片上的分段条：一格一条验收，亮的 = 满足 */
+.r2i-segs { display: inline-flex; gap: 3px; vertical-align: middle; }
+.r2i-segs i {
+  display: inline-block;
+  width: 14px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--r2i-line-2);
+}
+.r2i-segs i.on { background: rgb(var(--r2i-pos-rgb)); }
+
+/* 时间线类型 chip */
+.r2i-chip {
+  display: inline-block;
+  padding: 0 0.45em;
+  border-radius: 3px;
+  font-size: 0.8em;
+  line-height: 1.55;
+  vertical-align: 0.08em;
+  color: rgb(var(--r2i-chip));
+  background: rgba(var(--r2i-chip), .12);
+}
+.r2i-chip.pos  { --r2i-chip: var(--r2i-pos-rgb); }
+.r2i-chip.neg  { --r2i-chip: var(--r2i-neg-rgb); }
+.r2i-chip.ver  { --r2i-chip: var(--r2i-accent-rgb); }
+.r2i-chip.warn { --r2i-chip: var(--r2i-warn-rgb); }
+
+/* 首页：各主线并排的卡片。r2i-grid 只是版式，不画框也不要标题 */
+.callout[data-callout="r2i-grid"] {
+  background: none;
+  border: 0;
+  padding: 0;
+  --callout-border-width: 0;
+}
+.callout[data-callout="r2i-grid"] > .callout-title { display: none; }
+.callout[data-callout="r2i-grid"] > .callout-content {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8em;
+}
+@media (max-width: 600px) {
+  .callout[data-callout="r2i-grid"] > .callout-content { grid-template-columns: 1fr; }
+}
+.is-mobile .callout[data-callout="r2i-grid"] > .callout-content { grid-template-columns: 1fr; }
+.callout[data-callout="r2i-line"] {
+  --callout-color: var(--r2i-ink-rgb);
+  --callout-border-width: 1px;
+  background: var(--r2i-bg);
+  border: 1px solid var(--r2i-line-2);
+  border-radius: 6px;
+  margin: 0;
+  font-size: 0.92em;
+}
+.callout[data-callout="r2i-line"] > .callout-title .callout-icon { display: none; }
+.callout[data-callout="r2i-line"] > .callout-title { font-weight: 600; }
+
+/* 首页的标题和间距 */
+.r2i-home .markdown-rendered h1 { font-size: 1.5em; margin: 0.2em 0 0.4em; }
+.r2i-home .markdown-rendered h2 { margin-top: 1.4em; }
+.r2i-home .callout { margin: 0.8em 0; }
+.r2i-src { color: var(--r2i-faint); font-size: 0.82em; margin-left: 0.25em; }  /* 读数没出处 */
+
+/* ---------- 14. 可读性（手机和桌面对齐） ----------
+   取自 tasteskill：字号只用四档且拉开；一栏宽度；正文全墨色；不用细线和描边框，用留白和底色深浅分层；
+   等宽字只给真代码块。 */
+
+/* 14.1 一栏宽度：Mac 上每页都是 42em（约 40 个汉字）居中，手机本来就窄、全宽。
+   不管「可读行宽」开关，也不管 research / reading / wide 档位；只有首页和实验索引放宽到 56em。 */
+/* 页宽默认不封顶，铺满窗格。
+   想再封顶：把下面两个 none 改成数字，如 calc(var(--font-text-size, 16px) * 42)，存盘即生效。 */
+body { --r2i-measure: none; --r2i-measure-wide: none; --file-line-width: 100%; --line-width: 100%; --line-width-wide: 100%; --max-width: 100%; }  /* 用正文字号乘出来的定值：写 em 的话标题行会按自己的大字号变宽、和正文对不齐 */
+body .markdown-preview-view .markdown-preview-sizer.markdown-preview-sizer {
+  max-width: var(--r2i-measure) !important;
+  width: auto !important;
+  margin-inline: auto !important;
+}
+body .markdown-preview-view.r2i-home .markdown-preview-sizer.markdown-preview-sizer,
+body .markdown-preview-view.r2i-index .markdown-preview-sizer.markdown-preview-sizer {
+  max-width: var(--r2i-measure-wide) !important;
+}
+/* 编辑模式：和 academic.css 的档位一样，只给 .cm-sizer 封顶居中，不动它的 width */
+body .markdown-source-view.mod-cm6 .cm-sizer.cm-sizer {
+  max-width: var(--r2i-measure) !important;
+  margin-inline: auto !important;
+  width: 100% !important;  /* Minimal 在编辑模式给 .cm-sizer 写死 width，一起放开。
+     不能写 auto：.cm-sizer 在 flex 容器里，auto + 左右 auto 边距会缩到最窄内容宽，
+     手机上编辑模式就成了一行一个字的竖条。100% 铺满，封顶交给 max-width。 */
+}
+/* 手机编辑模式兜底：一律铺满 */
+body.is-mobile .markdown-source-view.mod-cm6 .cm-sizer.cm-sizer {
+  width: 100% !important;
+  max-width: none !important;
+}
+body .markdown-source-view.mod-cm6.r2i-home .cm-sizer.cm-sizer,
+body .markdown-source-view.mod-cm6.r2i-index .cm-sizer.cm-sizer {
+  max-width: var(--r2i-measure-wide) !important;
+}
+
+/* 14.2 字号四档：页标题 1.5 · 节标题 1.2 · 正文 1 · 小字 0.875。h3 和正文一样大，只加粗。 */
+body {
+  --h1-size: 1.5em;
+  --h2-size: 1.2em;
+  --h3-size: 1em;
+  --h4-size: 1em;
+  --h5-size: 0.875em;
+  --h6-size: 0.875em;
+  --r2i-small: 0.875em;
+  --line-height-normal: 1.72;
+}
+.markdown-rendered h1,
+.markdown-source-view.mod-cm6 .HyperMD-header-1 { border-bottom: 0; padding-bottom: 0; margin-bottom: 0.6em; }
+.markdown-rendered h2 { border-top: 0; padding-top: 0; margin-top: 2.4em; margin-bottom: 0.6em; }
+.markdown-rendered h3 { margin-top: 1.8em; }
+.markdown-rendered li { margin-block: 0.28em; }
+
+/* 页里已经有 # 标题时，不再显示文件名那一行大标题（同一页两个标题） */
+.markdown-preview-view:has(.el-h1) .inline-title,
+.markdown-source-view.mod-cm6:has(.HyperMD-header-1) .inline-title { display: none; }
+/* 属性里的 cssclasses 是排版开关，不给人看 */
+.metadata-property[data-property-key="cssclasses"] { display: none; }
+
+/* 14.3 行内代码：正文字体、底色一层、不加描边，长路径能折行（「指南」不再被挤成「指 / 南」） */
+.markdown-rendered :not(pre) > code,
+.markdown-source-view.mod-cm6 .cm-inline-code:not(.cm-formatting) {
+  font-family: var(--font-text);
+  font-size: 0.95em;
+  font-variant-numeric: tabular-nums;
+  color: var(--r2i-ink-2);
+  background: rgba(var(--r2i-ink-rgb), .06);
+  border: 0;
+  border-radius: 3px;
+  padding: 0.06em 0.3em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* 14.4 Callout：去掉左边细线，只靠底色深浅；红色竖条只留给「需要你」 */
+body .callout {
+  --callout-border-width: 0;
+  --callout-border-opacity: 0;
+  border: 0;
+  border-radius: 6px;
+  background-color: rgba(var(--callout-color), .06);
+}
+body .callout[data-callout="summary"] { background-color: rgba(var(--r2i-ink-rgb), .05); }
+body .callout[data-callout="owner"] {
+  background-color: rgba(var(--r2i-flag-rgb), .07);
+  box-shadow: inset 4px 0 0 rgb(var(--r2i-flag-rgb));
+}
+body .callout[data-callout="exp"] { border: 0; background-color: rgba(var(--r2i-accent-rgb), .05); }
+/* 折起来的细节（选项和依据、给线程看、原文和证据）：收成一行灰字，展开才有底色 */
+body .callout[data-callout="note"] {
+  --callout-color: var(--r2i-ink-rgb);
+  background-color: transparent;
+  padding: 0.15em 0;
+  margin-block: 0.35em 0.9em;
+}
+body .callout[data-callout="note"] > .callout-title { color: var(--r2i-muted); font-weight: 500; font-size: var(--r2i-small); }
+body .callout[data-callout="note"] > .callout-title .callout-icon { display: none; }
+body .callout[data-callout="note"]:not(.is-collapsed) {
+  background-color: rgba(var(--r2i-ink-rgb), .035);
+  padding: 0.6em 0.9em;
+}
+/* 导航那行引用：去掉左线，灰色小字 */
+.markdown-rendered blockquote { border-left: 0; padding-inline-start: 0; font-size: var(--r2i-small); }
+
+/* 首页卡片：不画框，用一层底色 */
+.callout[data-callout="r2i-line"] {
+  border: 0;
+  background: rgba(var(--r2i-ink-rgb), .04);
+}
+
+/* 14.5 待决：折叠块回到自己那条下面（阅读模式里 Tasks 把它排到了勾选行前面） */
+.markdown-rendered li.task-list-item:has(> .callout) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+.markdown-rendered li.task-list-item:has(> .callout) > ul { order: 50; flex: 1 0 100%; }
+.markdown-rendered li.task-list-item:has(> .callout) > .callout { order: 99; flex: 1 0 100%; }
+/* 问题文字占勾选框右边剩下的宽度，手机上长问题在这一格里折行，不掉到勾选框下面 */
+.markdown-rendered li.task-list-item:has(> .callout) > .tasks-list-text { flex: 1 1 0; min-width: 0; }
+
+/* 14.6 验收进度条：两层，上面「短名 … 读数 · 线」，下面整条进度条；Mac 和手机同一个样子。
+   灰条 = 对照方法（基线）的读数；彩条 = 我们的读数，绿过线、琥珀没过；黑竖线 = 要过的线。 */
+.r2i-crit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "lab num" "bar bar";
+  align-items: baseline;
+  column-gap: 1em;
+  row-gap: 0.5em;
+  padding: 1em 0 0.2em;
+  border: 0;
+  font-size: 1em;
+}
+.r2i-lab { grid-area: lab; }
+.r2i-num { grid-area: num; text-align: right; color: var(--r2i-ink); white-space: nowrap; }
+.r2i-bar {
+  grid-area: bar;
+  --fill-a: .85;
+  height: 8px;
+  border-radius: 4px;
+  background:
+    linear-gradient(rgba(var(--fill), var(--fill-a)), rgba(var(--fill), var(--fill-a))) 0 0 / var(--v) 100% no-repeat,
+    rgba(var(--r2i-ink-rgb), .07);
+  box-shadow: none;
+}
+.r2i-bar.is-base { --fill: var(--r2i-ink-rgb); --fill-a: .30; opacity: 1; }
+.r2i-bar.is-empty {
+  background: repeating-linear-gradient(45deg, rgba(var(--r2i-ink-rgb), .09) 0 4px, transparent 4px 8px);
+}
+.r2i-bar[style*="--t"]::after { top: -4px; bottom: -4px; border-radius: 1px; }
+.r2i-note { color: var(--r2i-muted); font-size: var(--r2i-small); padding: 0.4em 0 0.1em; }
+
+/* 14.7 编辑模式（实时预览）里收掉机器字段 */
+/* 进度页的属性全是脚本写的数字，摘要那行已经有了，这里不再显示 */
+body .metadata-container.metadata-container:has(.metadata-property[data-property-key="goal_version"]) { display: none !important; }
+/* 块编号 ^dec-NN 只在光标停在那一行时露出来 */
+.markdown-source-view.mod-cm6 .cm-line:not(.cm-active) .cm-blockid { display: none; }
+/* 脚本的注释行压成一行小灰字 */
+.markdown-source-view.mod-cm6 .cm-line:not(.cm-active) .cm-comment {
+  color: var(--text-faint);
+  font-size: var(--r2i-small);
+}
+/* 待决：「选项和依据」折叠块缩进到勾选框后面，和问题文字对齐 */
+body .markdown-source-view.mod-cm6 .cm-contentContainer.cm-contentContainer > .cm-content > .HyperMD-task-line + .cm-embed-block.cm-callout {
+  margin-left: 1.75em !important;
+  margin-right: 0 !important;
+  width: auto !important;
+}
+.markdown-rendered div:has(> ul.contains-task-list) + div > .callout[data-callout="note"] {
+  margin-inline-start: 1.6em;
+}
+
+/* 14.8 首页「要你定」卡片和侧栏顺序
+   卡片 = 一行粗体问题，下面每个选项一个小勾选框；勾一个 = 答复，取消勾选 = 撤回。 */
+.markdown-rendered li:has(> ul.contains-task-list) > ul.contains-task-list { margin-block: 0.2em 0.4em; }
+.markdown-rendered li:has(> ul.contains-task-list) > ul.contains-task-list > li.task-list-item {
+  display: inline-flex;
+  align-items: baseline;
+  margin: 0.15em 1.2em 0.15em 0;
+}
+/* 侧栏调淡：只按 agent/ 一处来（见第 14 节末尾）。 */
+
+
+/* 首页「结构图」：每条主线一个折叠块，里面嵌入 结构/ 的冻结图。样式跟 r2i-line 一致，
+   默认收起（脚本写 `[!r2i-struct]-`）。 */
+.callout[data-callout="r2i-struct"] {
+  --callout-color: var(--r2i-ink-rgb);
+  --callout-border-width: 1px;
+  background: var(--r2i-bg);
+  border: 1px solid var(--r2i-line-2);
+  border-radius: 6px;
+  margin: 0;
+  font-size: 0.92em;
+  border: 0;
+  background: rgba(var(--r2i-ink-rgb), .04);
+}
+.callout[data-callout="r2i-struct"] > .callout-title .callout-icon { display: none; }
+.callout[data-callout="r2i-struct"] > .callout-title { font-weight: 600; }
+.r2i-home .callout[data-callout="r2i-struct"] { margin: 0.5em 0; }
+/* 图宽过屏时在块里横向滑动，不撑开页面（手机） */
+.callout[data-callout="r2i-struct"] > .callout-content { overflow-x: auto; }
+.callout[data-callout="r2i-struct"] .mermaid svg { max-width: none; }
+
+
+/* 读者: agent：给 agent 读的页在侧栏调淡，主人平时不用点开。
+   两层：
+   1. 打开的页：属性 `读者: agent` 的页同时带 cssclasses `reader-agent`（脚本写的页由脚本加；手写的页自己加），
+      页内文字调成次要色。
+   2. 侧栏文件列表：Obsidian 不把笔记属性交给文件树，所以只能按路径选。 */
+.markdown-preview-view.reader-agent,
+.markdown-source-view.reader-agent {
+  --text-normal: var(--text-muted);
+}
+/* 给 agent 的东西都在 agent/ 下，侧栏只按这一个文件夹调淡；
+   根目录只剩两个插件文件 CLAUDE.md、sortspec.md 也调淡。以后新加 agent 页不用再来这里加行。 */
+.nav-folder-title[data-path="agent"],
+.nav-folder-title[data-path^="agent/"],
+.nav-file-title[data-path^="agent/"],
+.nav-file-title[data-path="CLAUDE.md"],
+.nav-file-title[data-path="sortspec.md"] {
+  opacity: 0.4;
+}
+.nav-folder-title[data-path="agent"]:hover,
+.nav-folder-title[data-path^="agent/"]:hover,
+.nav-file-title[data-path^="agent/"]:hover,
+.nav-file-title[data-path="CLAUDE.md"]:hover,
+.nav-file-title[data-path="sortspec.md"]:hover,
+.nav-file-title.is-active {
+  opacity: 1;
+}
+
+/* ---------- 15. 首页 ----------
+   标题衬线、首页属性藏起、列表一行一件加细线、「去定」不加下划线、摘要条左竖线、种类小色块 .r2i-k。
+   种类小色块由 render 输出 <span class="r2i-k k-money|k-pick|k-do|k-ok|k-warn">…</span>。不加任何宽度限制。 */
+.markdown-rendered h1, .markdown-rendered h2, .markdown-rendered h3, .inline-title,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-header {
+  font-family: "Noto Serif SC", "Songti SC", "STSong", "Source Han Serif SC", serif;
+  font-weight: 700;
+}
+.r2i-home .metadata-container,
+.r2i-home .frontmatter-container { display: none; }
+
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul { list-style: none; padding-inline-start: 0; margin: 0.2em 0 0.6em; }
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul > li {
+  margin: 0; padding: 0.5em 0; border-bottom: 1px solid var(--r2i-line);
+}
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul > li:last-child { border-bottom: none; }
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul > li::marker { content: none; }
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul > li > p { margin: 0; }
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul .list-bullet,
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul .list-collapse-indicator { display: none; }
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) ul ul { margin: 0.2em 0 0 1em; }
+
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) a.internal-link { text-decoration: none; }
+:is(.r2i-home.markdown-rendered, .r2i-home .markdown-rendered) a.internal-link:hover { text-decoration: underline; }
+
+.r2i-home .callout[data-callout="summary"] {
+  --callout-color: var(--r2i-accent-rgb);
+  --callout-border-width: 0 0 0 3px;
+  --callout-radius: 3px;
+  background-color: rgba(var(--r2i-accent-rgb), .07);
+  border-left: 3px solid rgb(var(--r2i-accent-rgb));
+}
+.r2i-home .callout[data-callout="summary"] .callout-icon { display: none; }
+.r2i-home .callout[data-callout="summary"] mark,
+.r2i-home .callout[data-callout="summary"] .cm-highlight {
+  background: none; color: var(--r2i-ink); font-weight: 700; padding: 0;
+}
+
+.r2i-k {
+  display: inline-block; font-size: 0.78em; line-height: 1.6; padding: 0 0.55em; margin-right: 0.55em;
+  border-radius: 0.8em; white-space: nowrap; vertical-align: 0.08em; font-weight: 500;
+}
+.r2i-k.k-money { background: rgba(var(--r2i-warn-rgb), .14); color: rgb(var(--r2i-warn-rgb)); }
+.r2i-k.k-pick  { background: rgba(var(--r2i-flag-rgb), .10); color: var(--r2i-flag); }
+.r2i-k.k-do    { background: rgba(var(--r2i-accent-rgb), .12); color: var(--r2i-accent); }
+.r2i-k.k-ok    { background: rgba(var(--r2i-pos-rgb), .14); color: rgb(var(--r2i-pos-rgb)); }
+.r2i-k.k-warn  { background: rgba(var(--r2i-warn-rgb), .14); color: rgb(var(--r2i-warn-rgb)); }
+
+/* ---------- 16. 侧栏修整 ----------
+   空着又不再用的文件夹先藏起来，不删（删要主人打字批）：研究/、Excalidraw/（插件默认目录）、汇报/待决/（停用）。
+   常驻脚本页是自检脚本写的状态页，和其他 agent 页一样调淡。撤回：删掉这一节。 */
+/* 空文件夹都放进 agent/_空/，藏这一个就行。 */
+.nav-folder:has(> .nav-folder-title[data-path="agent/_空"]),
+.nav-folder:has(> .nav-folder-title[data-path="管理"]) {
+  display: none;
+}

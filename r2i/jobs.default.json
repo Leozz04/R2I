@@ -1,0 +1,86 @@
+{
+ "observe_until": "",
+ "jobs": [
+  {
+   "label": "@r2i-sync",
+   "what": "把台账渲染成 Obsidian 页面（首页、进度、汇报）",
+   "schedule": "每 1 分钟",
+   "heartbeat": "agent/管理/.r2i-sync-heartbeat",
+   "max_age_seconds": 300,
+   "kind": "interval",
+   "restart": "auto",
+   "install": null,
+   "runner": "程序",
+   "target_thread": null,
+   "why_model": null
+  },
+  {
+   "label": "@report-reply",
+   "what": "盯汇报页上你的勾选和回复，记进台账",
+   "schedule": "常驻（每 2 秒看一次）",
+   "heartbeat": "agent/管理/.reply-watch-heartbeat",
+   "max_age_seconds": 60,
+   "kind": "keepalive",
+   "restart": "auto",
+   "install": null,
+   "runner": "程序",
+   "target_thread": null,
+   "why_model": null
+  },
+  {
+   "label": "@night-watchdog",
+   "what": "夜间任务巡检（预算、超时、磁盘）",
+   "schedule": "每 30 分钟",
+   "heartbeat": "agent/管理/.night-watchdog-heartbeat",
+   "max_age_seconds": 2700,
+   "kind": "interval",
+   "restart": "auto",
+   "install": null,
+   "runner": "程序",
+   "target_thread": null,
+   "why_model": null
+  },
+  {
+   "label": "@selfcheck",
+   "what": "自检：看上面这些有没有掉，掉了拉起并通知",
+   "schedule": "每小时",
+   "heartbeat": "agent/管理/.selfcheck-heartbeat",
+   "max_age_seconds": 7200,
+   "kind": "interval",
+   "restart": "auto",
+   "install": null,
+   "runner": "程序",
+   "target_thread": null,
+   "why_model": null,
+   "mode": "jobs-v2"
+  },
+  {
+   "label": "@wake-bridge",
+   "what": "手机通知上点「叫醒」后，把叫醒记进台账",
+   "schedule": "常驻（收 ntfy 消息）",
+   "heartbeat": "agent/管理/.wake-bridge-heartbeat",
+   "max_age_seconds": 300,
+   "kind": "keepalive",
+   "restart": "auto",
+   "install": null,
+   "runner": "程序",
+   "target_thread": null,
+   "why_model": null,
+   "mode": "jobs-v2"
+  },
+  {
+   "label": "@nightly",
+   "what": "夜间整理：仓库整理方案、做梦建议稿、术语表、早报",
+   "schedule": "每天 04:30（本地时间）",
+   "heartbeat": null,
+   "max_age_seconds": 0,
+   "kind": "calendar",
+   "restart": "alert",
+   "install": null,
+   "runner": "模型",
+   "target_thread": null,
+   "why_model": "整理和写早报要读材料、做判断",
+   "mode": "jobs-v2"
+  }
+ ]
+}

@@ -1,0 +1,48 @@
+# Copy to <project>/r2i.toml and edit. Every key below is required except [keys], departments and maintainer.
+project = "my-project"
+owner = "PI"                       # how threads and pages address the person who decides
+tz = "UTC"                         # IANA zone for deadlines, daily pages and quiet hours
+quiet_hours = "00:00-09:00"        # no pushes in this window (local time)
+vault = "vault"                    # Obsidian vault (relative to this file, or absolute)
+ledger = "ledger/ledger.sqlite"    # the sqlite ledger
+runs_root = "runs"                 # where run directories, moved attachments and slim storage live
+currency = "CNY"
+approve_over = 10                  # budgets at or under this need no owner approval
+night_budget = 50                  # total the night queue may spend
+max_experiment_threads = 3         # experiment threads allowed at once
+
+[[mainlines]]
+id = "main"
+name = "My Main Line"
+short = "Main"
+
+# Optional: Keychain item names. A feature whose item is not set is disabled with a message.
+# Every item name must start with keychain_prefix (default "<project>-", here "my-project-"); r2i.toml with any other
+# name is refused. `r2i paid-run` copies the item into the environment of the child command, so run only your own
+# commands under paid-run.
+# keychain_prefix = "my-project-"
+[keys]
+# batch_api = "my-project-anthropic"
+# deepseek = "my-project-deepseek"
+# ntfy_topic = "my-project-ntfy"
+# ntfy_wake_topic = "my-project-ntfy-wake"
+# wake_token = "my-project-wake-token"   # reply-watch wake token; unset = no wake
+
+# departments = ["Experiments", "Data"]
+# maintainer = "Maintainer"   # editors whose name starts with this may edit any audit record; empty = nobody
+
+# Optional: a Claude-compatible relay. paid_run sees base_url in ANTHROPIC_BASE_URL and fills ANTHROPIC_AUTH_TOKEN from
+# [keys] relay (or relay_think when R2I_RELAY_KEY=think); the official ANTHROPIC_API_KEY is dropped for it.
+# [relay]
+# base_url = "https://relay.example.com"
+
+# Optional: the code worker (r2i worker). model and budget are required to run it.
+# [worker]
+# base_url = "https://relay.example.com"   # empty = the official endpoint
+# model = "claude-sonnet-5-5"
+# effort = "high"
+# budget = "CODE-WORKER-20260101"          # the standing paid_run budget for code runs
+# cap = 10.0                                # per-run cap; the CLI stops at headroom x cap
+# headroom = 0.75
+# usd_rate = 7.3                            # currency units per USD for the CLI's cost estimate
+# out_dir = ""                              # logs; empty = <runs_root>/code-worker

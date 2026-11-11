@@ -1,0 +1,12 @@
+filters:
+  and:
+    - file.inFolder("会议")
+    - file.ext == "md"
+views:
+  - type: table
+    name: 全部会议
+    order:
+      - file.name
+      - date
+      - type
+      - status
