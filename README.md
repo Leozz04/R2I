@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/img/logo.jpg" alt="R²I logo: a sleeping cat in a wide hat under a glowing light bulb" width="200">
+<img src="docs/img/logo.png" alt="R²I logo: a sleeping cat in a wide hat under a glowing light bulb" width="200">
 
 # R²I
 
